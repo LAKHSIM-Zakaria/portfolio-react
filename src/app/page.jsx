@@ -25,8 +25,8 @@ const Homepage = () => {
           {/* DESC */}
           <p className="md:text-xl">
   I am a seasoned Software Engineer with a strong track record of success. 
-  Currently, I'm thriving in my role as a Software Engineer at Capgemini Engineering 
-  in Casablanca-Settat, Morocco, where I've gained valuable experience over the past 4 years.
+  Currently, I am thriving in my role as a Software Engineer at Capgemini Engineering 
+  in Casablanca-Settat, Morocco, where I have gained valuable experience over the past 4 years.
 </p>
 
           {/* BUTTONS */}
