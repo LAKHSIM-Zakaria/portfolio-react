@@ -1,3 +1,6 @@
+// Add this line at the top of your file to indicate this is a Client Component
+"use client";
+
 import React, { useEffect } from 'react';
 
 const LogVisitorComponent = () => {
