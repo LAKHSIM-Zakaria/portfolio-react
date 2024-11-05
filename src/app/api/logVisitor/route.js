@@ -1,10 +1,13 @@
-useEffect(() => {
+import React, { useEffect } from 'react';
+
+const LogVisitorComponent = () => {
+  useEffect(() => {
     const logVisitor = async () => {
       const isMobile = () => {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
         return /Mobi|Android|iPhone|iPad/i.test(userAgent);
       };
-  
+
       const getVisitorIP = async () => {
         try {
           const response = await fetch('https://api.ipify.org?format=json');
@@ -15,9 +18,9 @@ useEffect(() => {
           return 'unknown';
         }
       };
-  
+
       const getLocation = async () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
               (position) => {
@@ -38,10 +41,10 @@ useEffect(() => {
           }
         });
       };
-  
+
       const visitorIP = await getVisitorIP();
       const location = await getLocation();
-  
+
       const response = await fetch('/api/logVisitor', {
         method: 'POST',
         headers: {
@@ -54,7 +57,7 @@ useEffect(() => {
           userAgent: navigator.userAgent,
           referrer: document.referrer || 'direct',
           timestamp: new Date().toISOString(),
-  
+
           // Device Information
           deviceType: isMobile() ? 'mobile' : 'desktop',
           os: navigator.platform,
@@ -62,7 +65,7 @@ useEffect(() => {
           screenHeight: window.screen.height,
           language: navigator.language,
           connectionType: navigator.connection?.effectiveType || 'unknown',
-  
+
           // User Authentication Data (if applicable)
           userId: 'user-unique-id', // Replace with actual user ID from your auth system
           username: 'user-username', // Replace with actual username
@@ -70,12 +73,12 @@ useEffect(() => {
           roles: ['admin', 'editor'], // Example roles
           accountStatus: 'active', // Replace with actual account status
           lastLogin: new Date().toISOString(), // Replace with actual last login timestamp
-  
+
           // Session and Engagement Metrics
           sessionId: 'session-unique-id', // Replace with actual session ID
           timeSpentOnPage: 0, // You can calculate this dynamically
           clickTracking: [], // Capture click events if necessary
-  
+
           // Image Data
           uploadedImages: [
             {
@@ -89,38 +92,47 @@ useEffect(() => {
             url: 'profile-pic-url.jpg', // Replace with actual profile picture URL
             size: 102400, // Replace with actual profile picture size in bytes
           },
-  
+
           // Location Data
           location: location || {
             latitude: null,
             longitude: null,
             accuracy: null,
           }, // Use null if location could not be obtained
-  
+
           // Demographic Data (if applicable)
           age: 'user-age', // Replace with actual age if collected
           gender: 'user-gender', // Replace with actual gender if collected
-  
+
           // Performance and System Data
           loadTime: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart, // Example load time calculation
           errorLogs: [], // Capture any errors if necessary
-  
+
           // Marketing and Referral Data
           marketingSource: 'utm_source', // Capture UTM parameters if applicable
-  
+
           // Customization and Personalization Data
           userSettings: {}, // Replace with actual user settings if applicable
-  
+
           // Legal and Compliance Data
           consentGiven: true, // Replace with actual consent status
         }),
       });
-  
+
       if (!response.ok) {
         console.error('Failed to log visitor:', response.status, await response.text());
       }
     };
-  
+
     logVisitor();
-  }, []);
-  
+  }, []); // Empty dependency array means this effect runs once on mount
+
+  return (
+    <div>
+      <h1>Welcome to Our Site</h1>
+      {/* Add any other UI elements you need */}
+    </div>
+  );
+};
+
+export default LogVisitorComponent;
