@@ -3,6 +3,9 @@
     "eslint:recommended",
     "next/core-web-vitals"
   ],
+  "globals": {
+    "Promise": "writable"  // Add Promise as a global variable
+  },
   "rules": {
     "react/prop-types": "off",
     "no-unused-vars": "warn"
