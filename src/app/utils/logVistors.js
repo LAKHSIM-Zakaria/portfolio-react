@@ -16,8 +16,17 @@ export const logVisitor = async () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      //console.error("Failed to fetch visitor IP:", error);
-      return { ip: "unknown" };
+      return { ip: "unknown", hostname: "unknown" }; // Default if the IP info call fails
+    }
+  };
+
+  const getHostname = async (ip) => {
+    try {
+      const response = await fetch(`https://ipinfo.io/${ip}/hostname`);
+      const data = await response.text(); // hostname is returned as plain text
+      return data;
+    } catch (error) {
+      return "unknown"; // Default if the hostname lookup fails
     }
   };
 
@@ -33,12 +42,10 @@ export const logVisitor = async () => {
             });
           },
           (error) => {
-            //console.error("Geolocation error:", error);
             resolve(null);
           }
         );
       } else {
-        //console.warn("Geolocation is not supported by this browser.");
         resolve(null);
       }
     });
@@ -46,18 +53,22 @@ export const logVisitor = async () => {
 
   try {
     const visitorData = await getVisitorIP();
+    const hostname = await getHostname(visitorData.ip); // Fetch the hostname using the IP address
     const location = await getLocation();
-
+    console.log("Current URL:", window.location.href);
     const payload = {
       ip: visitorData.ip,
+      hostname: hostname, // Add hostname to the payload
       city: visitorData.city,
       region: visitorData.region,
       country: visitorData.country,
       postal_code: visitorData.postal,
       loc: visitorData.loc, // This is a string with "latitude,longitude"
       org: visitorData.org,
-      page: window.location.pathname,
-      referrer: document.referrer || "direct",
+      current_url: window.location.href, // Full URL of the current page
+      referrer: document.referrer || "direct", // Referrer URL
+      page: window.location.pathname, // Path part of the current URL
+      host: window.location.hostname, // Domain of the current URL
       user_agent: navigator.userAgent,
       devicetype: isMobile() ? "mobile" : "desktop",
       os: navigator.platform,
@@ -70,16 +81,14 @@ export const logVisitor = async () => {
       timestamp: new Date().toISOString(),
     };
 
-    //console.log("Visitor Payload:", payload);
-
     const { error } = await supabase.from("visitors").insert(payload);
 
     if (error) {
-      //console.error("Failed to log visitor:", error);
+      console.error("Failed to log visitor:", error);
     } else {
-      //console.log("Visitor logged successfully");
+      console.log("Visitor logged successfully");
     }
   } catch (error) {
-    //console.error("Error logging visitor:", error);
+    console.error("Error logging visitor:", error);
   }
 };
