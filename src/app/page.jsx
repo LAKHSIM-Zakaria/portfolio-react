@@ -3,8 +3,13 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { logVisitor } from "../app/utils/logVistors"; // Adjust the path as needed
+import React, { useEffect } from 'react'; // Add this line
 
 const Homepage = () => {
+  useEffect(() => {
+    logVisitor();
+  }, []);
   return (
     <motion.div
       className="h-full"
@@ -35,13 +40,12 @@ const Homepage = () => {
             Currently, I am thriving in my role as a Software Engineer at Capgemini Engineering 
             in Casablanca-Settat, Morocco, where I have gained valuable experience over the past 4 years.
           </p>
-
           {/* BUTTONS */}
           <div className="w-full flex gap-4">
-            <Link href ="/portfolio" className="p-4 rounded-lg ring-1 ring-black bg-black text-white">
+            <Link href="/portfolio" className="p-4 rounded-lg ring-1 ring-black bg-black text-white">
               View My Work
             </Link>
-            <Link href ="/contact" className="p-4 rounded-lg ring-1 ring-black">
+            <Link href="/contact" className="p-4 rounded-lg ring-1 ring-black">
               Contact Me
             </Link>
           </div>
