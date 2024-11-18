@@ -16,7 +16,7 @@ export const logVisitor = async () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("Failed to fetch visitor IP:", error);
+      //console.error("Failed to fetch visitor IP:", error);
       return { ip: "unknown" };
     }
   };
@@ -33,12 +33,12 @@ export const logVisitor = async () => {
             });
           },
           (error) => {
-            console.error("Geolocation error:", error);
+            //console.error("Geolocation error:", error);
             resolve(null);
           }
         );
       } else {
-        console.warn("Geolocation is not supported by this browser.");
+        //console.warn("Geolocation is not supported by this browser.");
         resolve(null);
       }
     });
@@ -70,16 +70,16 @@ export const logVisitor = async () => {
       timestamp: new Date().toISOString(),
     };
 
-    console.log("Visitor Payload:", payload);
+    //console.log("Visitor Payload:", payload);
 
     const { error } = await supabase.from("visitors").insert(payload);
 
     if (error) {
-      console.error("Failed to log visitor:", error);
+      //console.error("Failed to log visitor:", error);
     } else {
-      console.log("Visitor logged successfully");
+      //console.log("Visitor logged successfully");
     }
   } catch (error) {
-    console.error("Error logging visitor:", error);
+    //console.error("Error logging visitor:", error);
   }
 };
